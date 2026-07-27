@@ -60,6 +60,7 @@ final class PhotoLibrarySaver {
     /// システムの写真アプリを開く。
     ///
     /// iOS には特定のアセットを直接開く公開 API がないため、写真アプリを起動する。
+    /// `photos-redirect://` は写真アプリの標準スキームで、開けない場合は何もしない。
     func openInGallery(identifier: String) {
         let exists = PHAsset.fetchAssets(withLocalIdentifiers: [identifier], options: nil)
             .firstObject != nil

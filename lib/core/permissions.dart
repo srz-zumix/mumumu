@@ -13,6 +13,9 @@ class PermissionService {
   const PermissionService();
 
   /// 撮影に必要な権限（カメラ・フォトライブラリ）をまとめてリクエストする。
+  ///
+  /// アプリは保存のみを行い既存の写真を読み取らないため、
+  /// `photos` ではなく追加専用の `photosAddOnly` を要求する。
   Future<PermissionOutcome> requestCapturePermissions() async {
     final statuses = await <Permission>[
       Permission.camera,
