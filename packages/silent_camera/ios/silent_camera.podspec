@@ -7,7 +7,7 @@ AVCaptureVideoDataOutput のフレームから静止画を生成し、シャッ�
                        DESC
   s.homepage         = 'https://github.com/srz-zumix/mumumu'
   s.license          = { :file => '../../../LICENSE' }
-  s.author           = { 'srz-zumix' => 'srz.zumix@gmail.com' }
+  s.author           = { 'srz-zumix' => 'https://github.com/srz-zumix' }
   s.source           = { :path => '.' }
   s.source_files     = 'Classes/**/*'
   s.dependency 'Flutter'

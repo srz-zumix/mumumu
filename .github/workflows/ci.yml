@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  analyze-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: Install dependencies
+        run: |
+          flutter pub get
+          flutter pub get packages/silent_camera
+      - name: Analyze
+        run: flutter analyze
+      - name: Test (app)
+        run: flutter test
+      - name: Test (silent_camera)
+        run: flutter test
+        working-directory: packages/silent_camera
