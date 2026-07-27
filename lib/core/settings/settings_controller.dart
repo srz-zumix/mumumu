@@ -25,7 +25,6 @@ class SettingsController extends Notifier<AppSettings> {
   static const String _keyPhotoFormat = 'photo_format';
   static const String _keyAspectRatio = 'aspect_ratio';
   static const String _keyJpegQuality = 'jpeg_quality';
-  static const String _keySaveLocation = 'save_location';
   static const String _keyMirrorFrontCamera = 'mirror_front_camera';
   static const String _keyTapToShoot = 'tap_to_shoot';
   static const String _keyTimerSeconds = 'timer_seconds';
@@ -57,7 +56,6 @@ class SettingsController extends Notifier<AppSettings> {
         defaults.aspectRatio,
       ),
       jpegQuality: prefs.getInt(_keyJpegQuality) ?? defaults.jpegQuality,
-      saveLocation: prefs.getBool(_keySaveLocation) ?? defaults.saveLocation,
       mirrorFrontCamera:
           prefs.getBool(_keyMirrorFrontCamera) ?? defaults.mirrorFrontCamera,
       tapToShoot: prefs.getBool(_keyTapToShoot) ?? defaults.tapToShoot,
@@ -100,11 +98,6 @@ class SettingsController extends Notifier<AppSettings> {
     final clamped = quality.clamp(50, 100).toInt();
     state = state.copyWith(jpegQuality: clamped);
     await _prefs.setInt(_keyJpegQuality, clamped);
-  }
-
-  Future<void> setSaveLocation({required bool enabled}) async {
-    state = state.copyWith(saveLocation: enabled);
-    await _prefs.setBool(_keySaveLocation, enabled);
   }
 
   Future<void> setMirrorFrontCamera({required bool enabled}) async {

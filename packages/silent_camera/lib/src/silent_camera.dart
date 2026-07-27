@@ -71,7 +71,6 @@ class SilentCamera {
   Future<CaptureResult> capture({
     PhotoFormat format = PhotoFormat.jpeg,
     int jpegQuality = 95,
-    bool includeLocation = false,
     bool mirrorFrontCamera = false,
   }) async {
     final result = await _channel.invokeMapMethod<Object?, Object?>(
@@ -79,7 +78,6 @@ class SilentCamera {
       <String, Object?>{
         'format': format.name,
         'jpegQuality': jpegQuality,
-        'includeLocation': includeLocation,
         'mirrorFrontCamera': mirrorFrontCamera,
       },
     );

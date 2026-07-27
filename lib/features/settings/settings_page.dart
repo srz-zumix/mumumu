@@ -116,14 +116,6 @@ class SettingsPage extends ConsumerWidget {
             value: settings.tapToShoot,
             onChanged: (bool value) => controller.setTapToShoot(enabled: value),
           ),
-          const _SectionHeader('プライバシー'),
-          SwitchListTile(
-            title: const Text('位置情報を Exif に付与'),
-            subtitle: const Text('OFF のままなら位置情報は一切記録されません'),
-            value: settings.saveLocation,
-            onChanged: (bool value) =>
-                controller.setSaveLocation(enabled: value),
-          ),
           const _SectionHeader('表示'),
           ListTile(
             title: const Text('テーマ'),

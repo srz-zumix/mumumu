@@ -11,7 +11,6 @@ class AppSettings {
     this.photoFormat = PhotoFormat.jpeg,
     this.aspectRatio = AspectRatioPreset.ratio4x3,
     this.jpegQuality = 95,
-    this.saveLocation = false,
     this.mirrorFrontCamera = false,
     this.tapToShoot = false,
     this.timerSeconds = 0,
@@ -24,9 +23,6 @@ class AppSettings {
   final PhotoFormat photoFormat;
   final AspectRatioPreset aspectRatio;
   final int jpegQuality;
-
-  /// Exif へ位置情報を付与するか。
-  final bool saveLocation;
 
   /// 前面カメラの画像を左右反転して保存するか。
   final bool mirrorFrontCamera;
@@ -43,7 +39,6 @@ class AppSettings {
     PhotoFormat? photoFormat,
     AspectRatioPreset? aspectRatio,
     int? jpegQuality,
-    bool? saveLocation,
     bool? mirrorFrontCamera,
     bool? tapToShoot,
     int? timerSeconds,
@@ -56,7 +51,6 @@ class AppSettings {
       photoFormat: photoFormat ?? this.photoFormat,
       aspectRatio: aspectRatio ?? this.aspectRatio,
       jpegQuality: jpegQuality ?? this.jpegQuality,
-      saveLocation: saveLocation ?? this.saveLocation,
       mirrorFrontCamera: mirrorFrontCamera ?? this.mirrorFrontCamera,
       tapToShoot: tapToShoot ?? this.tapToShoot,
       timerSeconds: timerSeconds ?? this.timerSeconds,

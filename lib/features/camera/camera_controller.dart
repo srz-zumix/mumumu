@@ -232,7 +232,6 @@ class CameraController extends Notifier<CameraState> {
       final result = await _camera.capture(
         format: settings.photoFormat,
         jpegQuality: settings.jpegQuality,
-        includeLocation: settings.saveLocation,
         mirrorFrontCamera: settings.mirrorFrontCamera &&
             state.lensDirection == CameraLensDirection.front,
       );
