@@ -490,12 +490,11 @@ internal class CameraSession(
     }
 
     /** 端末の向きとセンサー向きから、保存画像に必要な回転角を求める。 */
-    @Suppress("DEPRECATION")
     private fun jpegOrientation(): Int {
         val characteristics = characteristics ?: return 0
         val sensorOrientation =
             characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION) ?: 0
-        val deviceRotation = when (activity.windowManager.defaultDisplay.rotation) {
+        val deviceRotation = when (displayRotation()) {
             Surface.ROTATION_90 -> 90
             Surface.ROTATION_180 -> 180
             Surface.ROTATION_270 -> 270
@@ -507,6 +506,14 @@ internal class CameraSession(
             (sensorOrientation - deviceRotation + 360) % 360
         }
     }
+
+    @Suppress("DEPRECATION")
+    private fun displayRotation(): Int =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            activity.display?.rotation ?: Surface.ROTATION_0
+        } else {
+            activity.windowManager.defaultDisplay.rotation
+        }
 
     private fun applyOrientation(
         jpeg: ByteArray,
