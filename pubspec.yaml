@@ -1,0 +1,26 @@
+name: mumumu
+description: 静かに撮れるカメラアプリ mumumu
+publish_to: "none"
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.5.0
+  flutter: ">=3.24.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_riverpod: ^3.4.1
+  permission_handler: ^12.0.3
+  share_plus: ^13.3.0
+  shared_preferences: ^2.5.5
+  silent_camera:
+    path: packages/silent_camera
+
+dev_dependencies:
+  flutter_lints: ^6.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
