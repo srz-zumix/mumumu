@@ -1,0 +1,44 @@
+name: mumumu
+description: "静かに撮れるカメラ mumumu"
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.12.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  # 状態管理（仕様書 4.2）
+  flutter_riverpod: ^2.6.1
+  # 設定値の永続化（仕様書 4.2）
+  shared_preferences: ^2.3.3
+  # 権限フロー（仕様書 5.1）
+  permission_handler: ^11.3.1
+  # ビューアからの共有（仕様書 6-3）
+  share_plus: ^10.1.2
+  # 設定画面のバージョン表示（仕様書 6-4）
+  package_info_plus: ^8.1.1
+  # 無音キャプチャ用の自作プラグイン（仕様書 4）
+  silent_camera:
+    path: packages/silent_camera
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  # テストで SilentCameraPlatform を差し替えるために使用する。
+  plugin_platform_interface: ^2.1.8
+
+# path_provider_android 2.3.x が依存する jni 1.0.1 は AGP 9 でビルドできないため、
+# jni を使わない 2.2 系に固定する。上流が対応したら削除する。
+dependency_overrides:
+  path_provider_android: 2.2.17
+
+flutter:
+  uses-material-design: true
