@@ -93,7 +93,10 @@ enum CaptureFormat {
   /// JPEG。
   jpeg,
 
-  /// HEIC（非対応端末では JPEG にフォールバックする）。
+  /// HEIC。
+  ///
+  /// iOS のみ対応する（HEIC 非対応の端末では JPEG にフォールバックする）。
+  /// Android は HEIC エンコードに非対応のため、常に JPEG で保存される。
   heic,
 }
 

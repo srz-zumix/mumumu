@@ -92,6 +92,7 @@ class CameraScreenController extends Notifier<CameraScreenState> {
   static const AppLogger _logger = AppLogger('camera');
 
   Timer? _countdownTimer;
+  Completer<bool>? _countdownCompleter;
 
   SilentCameraController get _camera =>
       ref.read(silentCameraControllerProvider);
@@ -102,9 +103,7 @@ class CameraScreenController extends Notifier<CameraScreenState> {
 
   @override
   CameraScreenState build() {
-    ref.onDispose(() {
-      _countdownTimer?.cancel();
-    });
+    ref.onDispose(_cancelCountdown);
     return const CameraScreenState();
   }
 
@@ -150,8 +149,7 @@ class CameraScreenController extends Notifier<CameraScreenState> {
 
   /// カメラを解放する。
   Future<void> stop() async {
-    _countdownTimer?.cancel();
-    _countdownTimer = null;
+    _cancelCountdown();
     state = state.copyWith(isReady: false, countdown: 0);
     await _camera.release();
   }
@@ -222,31 +220,47 @@ class CameraScreenController extends Notifier<CameraScreenState> {
 
     final int seconds = _settings.selfTimer.seconds;
     if (seconds > 0) {
-      await _runCountdown(seconds);
-      // カウントダウン中に画面を離れた場合は撮影しない。
-      if (state.countdown != 0) {
+      final bool elapsed = await _runCountdown(seconds);
+      // カウントダウンが中断（停止/破棄）された場合は撮影しない。
+      if (!elapsed) {
         return;
       }
     }
     await _capture();
   }
 
-  Future<void> _runCountdown(int seconds) {
-    final Completer<void> completer = Completer<void>();
+  /// セルフタイマーのカウントダウンを実行する。
+  ///
+  /// 満了した場合は `true`、[stop] や破棄で中断された場合は `false` を返す。
+  Future<bool> _runCountdown(int seconds) {
+    _cancelCountdown();
+    final Completer<bool> completer = Completer<bool>();
+    _countdownCompleter = completer;
     state = state.copyWith(countdown: seconds);
-    _countdownTimer?.cancel();
     _countdownTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
       final int remaining = state.countdown - 1;
       state = state.copyWith(countdown: remaining < 0 ? 0 : remaining);
       if (state.countdown <= 0) {
         timer.cancel();
         _countdownTimer = null;
+        _countdownCompleter = null;
         if (!completer.isCompleted) {
-          completer.complete();
+          completer.complete(true);
         }
       }
     });
     return completer.future;
+  }
+
+  /// カウントダウンを中断し、待機中の [shoot] を撮影せずに解放する。
+  void _cancelCountdown() {
+    _countdownTimer?.cancel();
+    _countdownTimer = null;
+    final Completer<bool>? completer = _countdownCompleter;
+    _countdownCompleter = null;
+    if (completer != null && !completer.isCompleted) {
+      completer.complete(false);
+    }
   }
 
   Future<void> _capture() async {

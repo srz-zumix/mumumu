@@ -75,7 +75,12 @@ enum class CaptureAspectRatio(val value: String, val ratio: Float) {
     }
 }
 
-/** Dart 側 `CaptureFormat` に対応する。 */
+/**
+ * Dart 側 `CaptureFormat` に対応する。
+ *
+ * Android は HEIC エンコードに非対応のため、[HEIC] が指定された場合も
+ * 実際の書き出しは JPEG にフォールバックする（[ImageWriter] を参照）。
+ */
 enum class CaptureFormat(val value: String) {
     JPEG("jpeg"),
     HEIC("heic");

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -86,22 +87,30 @@ class SettingsPage extends ConsumerWidget {
           ),
 
           const _SectionHeader('保存'),
-          ListTile(
-            title: const Text('保存形式'),
-            trailing: DropdownButton<CaptureFormat>(
-              value: settings.format,
-              onChanged: (CaptureFormat? value) =>
-                  value == null ? null : unawaited(controller.setFormat(value)),
-              items: CaptureFormat.values
-                  .map(
-                    (CaptureFormat value) => DropdownMenuItem<CaptureFormat>(
-                      value: value,
-                      child: Text(value.name.toUpperCase()),
-                    ),
-                  )
-                  .toList(),
+          if (Platform.isIOS)
+            ListTile(
+              title: const Text('保存形式'),
+              trailing: DropdownButton<CaptureFormat>(
+                value: settings.format,
+                onChanged: (CaptureFormat? value) => value == null
+                    ? null
+                    : unawaited(controller.setFormat(value)),
+                items: CaptureFormat.values
+                    .map(
+                      (CaptureFormat value) => DropdownMenuItem<CaptureFormat>(
+                        value: value,
+                        child: Text(value.name.toUpperCase()),
+                      ),
+                    )
+                    .toList(),
+              ),
+            )
+          else
+            const ListTile(
+              title: Text('保存形式'),
+              subtitle: Text('この端末では JPEG で保存します。'),
+              trailing: Text('JPEG'),
             ),
-          ),
           ListTile(
             title: const Text('JPEG 品質'),
             subtitle: Slider(

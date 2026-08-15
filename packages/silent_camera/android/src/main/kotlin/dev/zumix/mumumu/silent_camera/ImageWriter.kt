@@ -46,6 +46,8 @@ object ImageWriter {
         val fileName = FileNameGenerator.make(capturedAt)
         val file = temporaryFile(context, fileName)
 
+        // Android は HEIC エンコードに非対応のため、`options.format` の指定に
+        // かかわらず常に JPEG へフォールバックして書き出す（拡張子・MIME も JPEG）。
         FileOutputStream(file).use { output ->
             cropped.compress(Bitmap.CompressFormat.JPEG, options.jpegQuality, output)
         }

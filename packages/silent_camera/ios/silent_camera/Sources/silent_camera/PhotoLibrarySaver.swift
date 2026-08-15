@@ -71,9 +71,13 @@ enum PhotoLibrarySaver {
     }
   }
 
-  /// 写真アプリで開く。
-  static func openInPhotos(localIdentifier: String) {
-    // `photos-redirect://` は指定アセットを写真アプリで開くためのスキーム。
+  /// 写真アプリを開く。
+  ///
+  /// iOS には特定アセットを Photos アプリで直接開く公開 API がないため、
+  /// アプリ自体を前面に出すのみで `localIdentifier` のアセットは指定できない。
+  /// 引数はプラットフォーム間で API を揃えるために残している。
+  static func openInPhotos(localIdentifier _: String) {
+    // `photos-redirect://` は写真アプリを前面に出すためのスキーム。
     guard let url = URL(string: "photos-redirect://") else { return }
     DispatchQueue.main.async {
       if UIApplication.shared.canOpenURL(url) {

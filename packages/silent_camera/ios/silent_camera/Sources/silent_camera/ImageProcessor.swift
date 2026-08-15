@@ -88,19 +88,24 @@ enum ImageProcessor {
 
   /// 指定フォーマットで画像データを書き出す。
   ///
-  /// HEIC 非対応端末では JPEG にフォールバックする。
+  /// HEIC 非対応端末では JPEG にフォールバックするため、
+  /// 実際にエンコードに用いた [CaptureFormat] を併せて返す。
   static func encode(
     image: CGImage,
     format: CaptureFormat,
     quality: CGFloat,
     metadata: [String: Any]
-  ) -> Data? {
+  ) -> (data: Data, format: CaptureFormat)? {
     if format == .heic,
       let data = encode(image: image, type: UTType.heic, quality: quality, metadata: metadata)
     {
-      return data
+      return (data, .heic)
     }
-    return encode(image: image, type: UTType.jpeg, quality: quality, metadata: metadata)
+    guard let data = encode(image: image, type: UTType.jpeg, quality: quality, metadata: metadata)
+    else {
+      return nil
+    }
+    return (data, .jpeg)
   }
 
   private static func encode(

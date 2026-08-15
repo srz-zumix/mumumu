@@ -377,7 +377,7 @@ final class SilentCameraSession: NSObject {
     )
 
     guard
-      let data = ImageProcessor.encode(
+      let encoded = ImageProcessor.encode(
         image: processed,
         format: options.format,
         quality: options.jpegQuality,
@@ -387,8 +387,9 @@ final class SilentCameraSession: NSObject {
       throw SessionError.encodingFailed
     }
 
-    let fileName = FileNameGenerator.make(at: capturedAt, format: options.format)
-    let fileURL = try ImageProcessor.writeTemporaryFile(data: data, fileName: fileName)
+    // HEIC 非対応端末では JPEG にフォールバックするため、実際の形式で命名する。
+    let fileName = FileNameGenerator.make(at: capturedAt, format: encoded.format)
+    let fileURL = try ImageProcessor.writeTemporaryFile(data: encoded.data, fileName: fileName)
 
     var map: [String: Any] = [
       "filePath": fileURL.path,

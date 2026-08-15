@@ -294,4 +294,26 @@ void main() {
     expect(platform.released, isTrue);
     expect(container.read(cameraScreenProvider).isReady, isFalse);
   });
+
+  test('セルフタイマー中に停止すると撮影せず shoot が完了する', () async {
+    final ProviderContainer container = await createContainer(
+      permissions: FakePermissionService(),
+      initialValues: <String, Object>{'self_timer': 'seconds3'},
+    );
+    final CameraScreenController controller = container.read(
+      cameraScreenProvider.notifier,
+    );
+
+    await controller.start();
+
+    // カウントダウン開始後、満了前に停止する。
+    final Future<void> shooting = controller.shoot();
+    await controller.stop();
+
+    // 停止で中断された shoot は永久待機せず完了し、撮影も行わない。
+    await shooting.timeout(const Duration(seconds: 1));
+    expect(platform.captureCount, 0);
+    expect(platform.released, isTrue);
+    expect(container.read(cameraScreenProvider).isReady, isFalse);
+  });
 }

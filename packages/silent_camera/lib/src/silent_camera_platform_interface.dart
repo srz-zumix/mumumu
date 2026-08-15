@@ -88,6 +88,9 @@ abstract class SilentCameraPlatform extends PlatformInterface {
   }
 
   /// システムギャラリーで指定した画像を開く。
+  ///
+  /// Android は指定画像を直接開く。iOS には特定アセットを開く公開 API が
+  /// ないため、Photos アプリを前面に出すのみで画像の指定はできない。
   Future<void> openInGallery(String galleryUri) {
     throw UnimplementedError('openInGallery() は未実装です。');
   }
